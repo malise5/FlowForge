@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: flowforge-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: flowforge
+      POSTGRES_USER: flowforge_user
+      POSTGRES_PASSWORD: flowforge_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
