@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StateTransitionRepository extends JpaRepository<StateTransition, UUID> {
 
-    List<StateTransition> findByWorkItemIdOrderByCreatedAtAsc(UUID workItemId);
+    List<StateTransition> findByWorkItemIdOrderByChangedAtAsc(UUID workItemId);
 }

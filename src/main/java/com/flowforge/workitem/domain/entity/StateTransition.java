@@ -4,6 +4,8 @@ import com.flowforge.workitem.domain.enums.WorkItemState;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +23,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "state_transitions")
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StateTransition {
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
+    @Column(updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "work_item_id", nullable = false)
@@ -40,13 +42,13 @@ public class StateTransition {
     @Column(nullable = false)
     private WorkItemState toState;
 
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt;
+    @Column(name = "changed_at", nullable = false, updatable = false)
+    private Instant changedAt;
 
 
     @PrePersist
     void onCreate() {
-        this.createdAt = Instant.now();
+        this.changedAt = Instant.now();
     }
 
 

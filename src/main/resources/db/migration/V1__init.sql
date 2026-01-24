@@ -13,7 +13,7 @@ CREATE TABLE state_transitions (
     work_item_id UUID NOT NULL,
     from_state VARCHAR(50),
     to_state VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+    changed_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE INDEX idx_state_transitions_work_item

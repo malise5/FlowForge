@@ -4,6 +4,8 @@ import com.flowforge.workitem.domain.enums.WorkItemState;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,12 +22,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "work_items")
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WorkItem {
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
+    @Column(updatable = false, nullable = false)
     private UUID id;
 
     @Column(nullable = false)
@@ -38,8 +40,12 @@ public class WorkItem {
     @Column(nullable = false)
     private WorkItemState currentState;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    public void changeState(WorkItemState newState) {
+        this.currentState = newState;
+    }
 
     public WorkItem(String title, String description) {
         this.title = title;
