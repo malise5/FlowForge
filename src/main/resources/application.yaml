@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/flowforge
     username: flowforge_user
-    password: flowforge_pass
+    password: root
     jpa:
       hibernate:
         ddl-auto: validate

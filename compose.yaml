@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_DB: flowforge
       POSTGRES_USER: flowforge_user
-      POSTGRES_PASSWORD: flowforge_pass
+      POSTGRES_PASSWORD: root
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
