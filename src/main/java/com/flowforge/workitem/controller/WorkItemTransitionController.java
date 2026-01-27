@@ -2,6 +2,7 @@ package com.flowforge.workitem.controller;
 
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.dto.TransitionWorkItemRequest;
+import com.flowforge.workitem.dto.WorkItemResponse;
 import com.flowforge.workitem.service.WorkItemTransitionService;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class WorkItemTransitionController {
     }
 
     @PostMapping("/{id}/transition")
-    public WorkItem transition(@PathVariable UUID id, @Valid @RequestBody TransitionWorkItemRequest request) {
+    public WorkItemResponse transition(@PathVariable UUID id, @Valid @RequestBody TransitionWorkItemRequest request) {
         return service.transition(id, request.toState(), request.reason());
     }
 }

@@ -2,6 +2,7 @@ package com.flowforge.workitem.controller;
 
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.dto.CreateWorkItemRequest;
+import com.flowforge.workitem.dto.WorkItemResponse;
 import com.flowforge.workitem.service.WorkItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class WorkItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkItem create(@RequestBody CreateWorkItemRequest request){
+    public WorkItemResponse create(@RequestBody CreateWorkItemRequest request){
         return workItemService.create(request.title(), request.description());
     }
 

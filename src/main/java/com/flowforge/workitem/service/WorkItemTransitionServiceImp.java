@@ -3,6 +3,7 @@ package com.flowforge.workitem.service;
 import com.flowforge.workitem.domain.entity.StateTransition;
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.domain.enums.WorkItemState;
+import com.flowforge.workitem.dto.WorkItemResponse;
 import com.flowforge.workitem.repository.StateTransitionRepository;
 import com.flowforge.workitem.repository.WorkItemRepository;
 import java.util.EnumMap;
@@ -37,7 +38,7 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
 
     @Override
     @Transactional
-    public WorkItem transition(UUID workItemId, WorkItemState toState, String reason) {
+    public WorkItemResponse transition(UUID workItemId, WorkItemState toState, String reason) {
         WorkItem item = workItemRepository.findById(workItemId)
                 .orElseThrow(()-> new EntityNotFoundException("Work item not found"));
 
@@ -58,7 +59,7 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
 
         transitionRepository.save(transition);
 
-        return item;
+        return mapToResponse(item);
 
 
     }
@@ -69,5 +70,15 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
                     "Invalid transition from " + fromState + " to " + toState
             );
         }
+    }
+
+    private WorkItemResponse mapToResponse(WorkItem item) {
+        return new WorkItemResponse(
+                item.getId(),
+                item.getTitle(),
+                item.getDescription(),
+                item.getCurrentState(),
+                item.getCreatedAt()
+        );
     }
 }
