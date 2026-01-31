@@ -1,4 +1,4 @@
-package com.flowforge.common.exception;
+package com.flowforge.common;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

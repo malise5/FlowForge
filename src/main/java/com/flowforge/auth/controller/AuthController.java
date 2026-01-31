@@ -1,9 +1,9 @@
-package com.flowforge.workitem.controller;
+package com.flowforge.auth.controller;
 
-import com.flowforge.workitem.dto.AuthResponse;
-import com.flowforge.workitem.dto.LoginRequest;
-import com.flowforge.workitem.dto.RegisterRequest;
-import com.flowforge.workitem.service.AuthService;
+import com.flowforge.auth.dto.AuthResponse;
+import com.flowforge.auth.dto.LoginRequest;
+import com.flowforge.auth.dto.RegisterRequest;
+import com.flowforge.auth.service.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
