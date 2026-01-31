@@ -2,11 +2,16 @@ package com.flowforge.workitem.service;
 
 import com.flowforge.workitem.domain.entity.StateTransition;
 import com.flowforge.workitem.domain.entity.WorkItem;
+import com.flowforge.workitem.domain.enums.WorkItemState;
+import com.flowforge.workitem.dto.CreateWorkItemRequest;
 import com.flowforge.workitem.dto.WorkItemResponse;
 import com.flowforge.workitem.repository.StateTransitionRepository;
 import com.flowforge.workitem.repository.WorkItemRepository;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static com.flowforge.auth.security.SecurityUtils.getCurrentUserEmail;
+import static com.flowforge.auth.security.SecurityUtils.hasRole;
 
 
 @Service
@@ -23,20 +28,39 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Override
     @Transactional
-    public WorkItemResponse create(String title, String description) {
-        WorkItem item = new WorkItem(title, description);
-        WorkItem saved = workItemRepository.save(item);
+    public WorkItemResponse create(CreateWorkItemRequest req) {
+        String userEmail = getCurrentUserEmail();
+        WorkItem item = new WorkItem(
+                req.title(),
+                req.description(),
+                userEmail
+        );
+        workItemRepository.save(item);
 
 
         transitionRepository.save(
                 new StateTransition(
-                        saved.getId(),
+                        item.getId(),
                         null,
-                        saved.getCurrentState()
+                        WorkItemState.TODO
                 )
         );
 
-        return mapToResponse(saved);
+        return mapToResponse(item);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        WorkItem item = workItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Work item not found"));
+
+        String currentUser = getCurrentUserEmail();
+
+        if (!hasRole("ADMIN") && !item.getCreatedBy().equals(currentUser)) {
+            throw new RuntimeException("You cannot delete someone else's work item");
+        }
+
+        workItemRepository.delete(item);
     }
 
     private WorkItemResponse mapToResponse(WorkItem item) {
@@ -45,7 +69,8 @@ public class WorkItemServiceImpl implements WorkItemService {
                 item.getTitle(),
                 item.getDescription(),
                 item.getCurrentState(),
-                item.getCreatedAt()
+                item.getCreatedAt(),
+                item.getCreatedBy()
         );
     }
 
