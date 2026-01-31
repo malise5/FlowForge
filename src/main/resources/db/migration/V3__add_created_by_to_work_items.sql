@@ -1,0 +1,1 @@
+ALTER TABLE work_items ADD COLUMN created_by VARCHAR(255) NOT NULL DEFAULT 'system';
