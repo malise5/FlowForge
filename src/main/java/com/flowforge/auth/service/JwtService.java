@@ -1,4 +1,4 @@
-package com.flowforge.workitem.service;
+package com.flowforge.auth.service;
 
 import java.security.Key;
 import java.util.Date;
