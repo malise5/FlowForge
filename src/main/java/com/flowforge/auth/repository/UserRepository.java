@@ -1,6 +1,6 @@
-package com.flowforge.workitem.repository;
+package com.flowforge.auth.repository;
 
-import com.flowforge.workitem.domain.User;
+import com.flowforge.auth.domain.User;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
