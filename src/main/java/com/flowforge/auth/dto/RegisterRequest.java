@@ -1,3 +1,3 @@
-package com.flowforge.workitem.dto;
+package com.flowforge.auth.dto;
 
 public record RegisterRequest(String email, String password) {}
