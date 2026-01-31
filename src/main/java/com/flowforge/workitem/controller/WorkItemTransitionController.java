@@ -25,6 +25,6 @@ public class WorkItemTransitionController {
 
     @PostMapping("/{id}/transition")
     public WorkItemResponse transition(@PathVariable UUID id, @Valid @RequestBody TransitionWorkItemRequest request) {
-        return service.transition(id, request.toState(), request.reason());
+        return service.transition(id, request.toState());
     }
 }

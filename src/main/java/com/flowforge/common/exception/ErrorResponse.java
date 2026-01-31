@@ -1,4 +1,4 @@
-package com.flowforge.common;
+package com.flowforge.common.exception;
 
 import java.time.Instant;
 

@@ -1,10 +1,5 @@
-package com.flowforge.common;
+package com.flowforge.common.exception;
 
-import com.flowforge.common.exception.InvalidStateTransitionException;
-import com.flowforge.common.exception.ResourceNotFoundException;
-import com.flowforge.common.exception.UnauthorizedActionException;
-
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
