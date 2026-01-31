@@ -1,10 +1,10 @@
-package com.flowforge.workitem.service;
+package com.flowforge.auth.service;
 
-import com.flowforge.workitem.domain.User;
-import com.flowforge.workitem.dto.AuthResponse;
-import com.flowforge.workitem.dto.LoginRequest;
-import com.flowforge.workitem.dto.RegisterRequest;
-import com.flowforge.workitem.repository.UserRepository;
+import com.flowforge.auth.domain.User;
+import com.flowforge.auth.dto.AuthResponse;
+import com.flowforge.auth.dto.LoginRequest;
+import com.flowforge.auth.dto.RegisterRequest;
+import com.flowforge.auth.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
