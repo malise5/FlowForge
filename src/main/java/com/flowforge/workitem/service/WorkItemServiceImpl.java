@@ -1,5 +1,7 @@
 package com.flowforge.workitem.service;
 
+import com.flowforge.common.exception.ResourceNotFoundException;
+import com.flowforge.common.exception.UnauthorizedActionException;
 import com.flowforge.workitem.domain.entity.StateTransition;
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.domain.enums.WorkItemState;
@@ -52,12 +54,12 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Override
     public void delete(UUID id) {
         WorkItem item = workItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Work item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Work item not found"));
 
         String currentUser = getCurrentUserEmail();
 
         if (!hasRole("ADMIN") && !item.getCreatedBy().equals(currentUser)) {
-            throw new RuntimeException("You cannot delete someone else's work item");
+            throw new UnauthorizedActionException("You cannot delete someone else's work item");
         }
 
         workItemRepository.delete(item);

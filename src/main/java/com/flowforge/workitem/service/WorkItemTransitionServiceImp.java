@@ -1,6 +1,8 @@
 package com.flowforge.workitem.service;
 
 import com.flowforge.auth.security.SecurityConfig;
+import com.flowforge.common.exception.InvalidStateTransitionException;
+import com.flowforge.common.exception.UnauthorizedActionException;
 import com.flowforge.workitem.domain.entity.StateTransition;
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.domain.enums.WorkItemState;
@@ -50,7 +52,7 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
         String currentUser = getCurrentUserEmail();
 
         if (!hasRole("ADMIN") && !item.getCreatedBy().equals(currentUser)) {
-            throw new RuntimeException("You cannot modify someone else's work item");
+            throw new UnauthorizedActionException("You cannot modify someone else's work item");
         }
 
         WorkItemState oldState = item.getCurrentState();
@@ -64,9 +66,7 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
     }
     private void validateTransition(WorkItemState fromState, WorkItemState toState) {
         if (!ALLOWED_TRANSITIONS.getOrDefault(fromState, Set.of()).contains(toState)) {
-            throw new IllegalStateException(
-                    "Invalid transition from " + fromState + " to " + toState
-            );
+            throw new InvalidStateTransitionException("Invalid transition from " + fromState + " to " + toState);
         }
     }
 
