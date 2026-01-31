@@ -40,17 +40,23 @@ public class WorkItem {
     @Column(nullable = false)
     private WorkItemState currentState;
 
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
+
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
 
     public void changeState(WorkItemState newState) {
         this.currentState = newState;
     }
 
-    public WorkItem(String title, String description) {
+    public WorkItem(String title, String description, String createdBy) {
         this.title = title;
         this.description = description;
         this.currentState = WorkItemState.TODO;
         this.createdAt = Instant.now();
+        this.createdBy = createdBy;
     }
 }
