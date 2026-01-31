@@ -6,5 +6,5 @@ import com.flowforge.workitem.dto.WorkItemResponse;
 import java.util.UUID;
 
 public interface WorkItemTransitionService {
-    public WorkItemResponse transition(UUID workItemId, WorkItemState toState, String reason);
+    WorkItemResponse transition(UUID id, WorkItemState newState);
 }
