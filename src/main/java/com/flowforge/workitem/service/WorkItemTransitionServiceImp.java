@@ -1,8 +1,12 @@
 package com.flowforge.workitem.service;
 
+import com.flowforge.auth.security.SecurityConfig;
 import com.flowforge.workitem.domain.entity.StateTransition;
 import com.flowforge.workitem.domain.entity.WorkItem;
 import com.flowforge.workitem.domain.enums.WorkItemState;
+import static com.flowforge.auth.security.SecurityUtils.getCurrentUserEmail;
+import static com.flowforge.auth.security.SecurityUtils.hasRole;
+
 import com.flowforge.workitem.dto.WorkItemResponse;
 import com.flowforge.workitem.repository.StateTransitionRepository;
 import com.flowforge.workitem.repository.WorkItemRepository;
@@ -38,32 +42,26 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
 
     @Override
     @Transactional
-    public WorkItemResponse transition(UUID workItemId, WorkItemState toState, String reason) {
-        WorkItem item = workItemRepository.findById(workItemId)
+    public WorkItemResponse transition(UUID id, WorkItemState newState) {
+        WorkItem item = workItemRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Work item not found"));
 
 
-        WorkItemState fromState = item.getCurrentState();
+        String currentUser = getCurrentUserEmail();
 
-        validateTransition(fromState, toState);
+        if (!hasRole("ADMIN") && !item.getCreatedBy().equals(currentUser)) {
+            throw new RuntimeException("You cannot modify someone else's work item");
+        }
 
-        // update state
-        item.changeState(toState);
+        WorkItemState oldState = item.getCurrentState();
+        item.changeState(newState);
 
-        // audit log
-        StateTransition transition = new StateTransition(
-                item.getId(),
-                fromState,
-                toState
-        );
-
-        transitionRepository.save(transition);
+        transitionRepository.save(new StateTransition(id, oldState, newState));
 
         return mapToResponse(item);
 
 
     }
-
     private void validateTransition(WorkItemState fromState, WorkItemState toState) {
         if (!ALLOWED_TRANSITIONS.getOrDefault(fromState, Set.of()).contains(toState)) {
             throw new IllegalStateException(
@@ -72,13 +70,16 @@ public class WorkItemTransitionServiceImp implements WorkItemTransitionService{
         }
     }
 
+
+
     private WorkItemResponse mapToResponse(WorkItem item) {
         return new WorkItemResponse(
                 item.getId(),
                 item.getTitle(),
                 item.getDescription(),
                 item.getCurrentState(),
-                item.getCreatedAt()
+                item.getCreatedAt(),
+                item.getCreatedBy()
         );
     }
 }
